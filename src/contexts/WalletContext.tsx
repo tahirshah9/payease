@@ -50,18 +50,28 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     
     setIsConnecting(true);
     try {
-      await setupNetwork();
       const browserProvider = new ethers.BrowserProvider(window.ethereum);
       const accounts = await browserProvider.send("eth_requestAccounts", []);
-      
+
       if (accounts.length > 0) {
+        try {
+          await setupNetwork();
+        } catch (networkErr) {
+          console.error("Network switch failed", networkErr);
+        }
+
         const _signer = await browserProvider.getSigner();
         setProvider(browserProvider);
         setSigner(_signer);
         setAddress(accounts[0]);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Connection failed", err);
+      if (err?.code === 4001) {
+        alert("Connection request was rejected. Please approve the request in MetaMask.");
+      } else {
+        alert("Failed to connect wallet: " + (err?.message || "Unknown error"));
+      }
     } finally {
       setIsConnecting(false);
     }
