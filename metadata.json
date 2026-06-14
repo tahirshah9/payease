@@ -1,0 +1,6 @@
+{
+  "name": "PayEase",
+  "description": "AED Stablecoin Merchant Payment System built on Polygon.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
